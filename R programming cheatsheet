@@ -1,0 +1,423 @@
+# rbind and cbind
+To bind a row (or many rows) onto a matrix, the command rbind can be
+used.
+> a <- c(1,2,3,4)
+> b <- c(5,6,7,8)
+> ab_row <- rbind(a,b); ab_row
+[,1] [,2] [,3] [,4]
+a 1 2 3 4
+b 5 6 7 8
+To bind a column (or many columns) onto a matrix, the command cbind
+can be used.
+> ab_col <- cbind(ab_row, c(9,10)); ab_col
+[,1] [,2] [,3] [,4] [,5]
+a 1 2 3 4 9
+b 5 6 7 8 10
+
+#reading of data
+scan(?) # read data into a vector or list from console or file
+read.table(?) # read from .txt files
+read.csv(?)
+read.fwf(..) # read from files with fixed width format
+
+# read first few lines
+The first line contains the names of variables, then we use: header = TRUE.
+data1<-read.csv("C:/Data/crab.txt", sep = "", header = FALSE)
+> data1[1:8,] #first 8 rows
+names(data1)
+
+#assign header name
+varnames <- c("Subject", "Gender", "CA1", "CA2", "HW")
+> data2<-read.table("C:/Data/ex_1.txt", header = FALSE,
++ col.names = varnames)
+
+#import comma-separated data
+data3<-read.csv("C:/Data/ex_1_comma.txt",sep = ",", header = FALSE)
+
+#selecting some specified variables (columns)
+attach(data)
+data[,1]
+data[,2:4]
+
+#Selecting some specified observations (rows):
+> data3[1:2,] # row 1 to row 2
+
+#Select all observations/rows by some conditions
+> # all the rows (observations) whose gender = M:
+> data3[Gender == "M",]
+
+#all the rows (observations) whose gender = M and CA2>85
+> data3[Gender == "M" & CA2 > 85,]
+
+
+
+
+
+# commonly used commands
+# x and y are vectors
+max(x): maximum value of vector x
+min(x): minimum value of x
+sum(x): total of all the values in x
+mean(x): arithmetic average values in x
+range(x): min(x) and max(x)
+cor(x,y): correlation value between vectors x and y
+sort(x): a sorted version of x
+
+#for dataframe
+#Read/import a dataframe into R: 
+data = read.csv("crab.txt"...)
+names(data)  #to get the names of columns in data
+attach(data)
+colMeans(data) # get the mean of every column, if all columns are numeric
+which(data$x1 == 3) #get the index of all the rows of "data" that having x1
+= 3.
+
+#check size 
+dim(hdb)
+outputs row num, col num
+
+#frequency table
+table(Gender)
+
+#table with 2 categorical variables
+#bbd row, pmh column
+table(bbd, pmh)
+
+# proportion 
+prop.table(table(Gender)) 
+prop.table(table(Gender)) *100
+
+#conditional probability
+proptab = prop.table(tab, "pmh.use")*100 # create conditional percentage (condition on pmh.use) 
+#or 
+proptab = prop.table(tab, "cancer")*100 # create conditional percentage (condition on cancer) 
+
+
+# remove history
+rm(list = ls())
+
+#barplot
+barplot(table(gender))
+# main is header, col is set color
+barplot(table(gender), ylab = "Frequency", xlab = "Gender", 
+    col = c(2,2),main = "Bar plot of Gender") 
+
+
+############## CLUSTERED BAR PLOT (has beside = TRUE) 
+# it plot the clusters = columns 
+# we need the conditional probability on pmh.use 
+tab = table(cancer,pmh.use) #pmh.use in column 
+tab 
+proptab = prop.table(tab, "pmh.use")*100 
+
+barplot(proptab, beside = TRUE) # 2 clusters are formed by the column's categories, this is by default. 
+
+barplot(proptab, beside = TRUE, xlab = "PMH Usage", main="",col=c("darkblue","red"),legend = rownames(proptab) ) 
+
+
+
+############ STACKED BAR PLOT 
+
+tab = table(cancer, pmh.use) #pmh in column 
+  
+proptab = prop.table(tab, "pmh.use")*100 
+
+barplot(proptab, xlab = "PMH Usage", main="",col=c("darkblue","red"), 
+  legend = rownames(proptab)) 
+
+# each bar is 100% for each group of PMH. 
+
+#######  If cancer is in column then: 
+
+tab = table(pmh.use, cancer) 
+
+proptab = prop.table(tab, "pmh.use")*100 
+
+barplot(proptab,  xlab = "Cancer", main="",col=c(2,5),legend = rownames(proptab) ) 
+
+
+########################### PIE CHART 
+
+pie(table(gender), col = c(2,5), main = "Pie chart of Gender") 
+
+############# 
+
+BMI = c(29.5,28.6,24.7, 28.8, 23.7, 23.3,28.8, 26.7, 23.6, 27.1, 24.5,20.7,28,24.7, 16.3,26,14, 
+25.8,17.5,30.7,17.5,30.6, 29.7, 24.5,35,21.9,20.9,24.3,27.3, 26.5, 22,16.3, 30.1, 27.2) 
+
+hist(BMI, col = 3) 
+
+hist(BMI, col = 4, prob = TRUE, ylab = "Probability") 
+
+########## SUMMARIES 
+
+summary(mark) 
+
+summaries = c(min(mark),max(mark),mean(mark), median(mark), 
+ quantile(mark, 0.3), IQR(mark), range(mark), var(mark), sd(mark)) 
+summaries 
+
+########## HISTOGRAM 
+
+hist(mark) 
+
+hist(mark, prob = TRUE, col = 2, xlab = "Midterm Marks", ylab = "Density", main = "Histogram of the Midterm Marks") 
+
+#nclass splits the frequency/ histogram up more (change width of interval)
+hist(BMI, col = 3, nclass = 10)
+
+?hist
+
+######### BOX PLOT 
+
+boxplot(mark) # the simplest boxplot
+
+boxplot.stats(mark) # basic info to sketch boxplot
+
+#abline add a line
+boxplot(mark, ylab = "Midterm marks", main = "Boxplot of midterm marks", col = 5) 
+abline(h = median(mark)) 
+
+######################################  ONE CATEGORICAL AND ONE QUANTITATIVE VARIABLE 
+
+########### BOX PLOT and SOME DETAILS ABOUT BOX PLOT 
+
+#agemenop is quantitative, cancer is categorical
+boxplot(agemenop~cancer, col = c(5,5), ylab = "Age at Menopause", xlab = "Cancer Status") 
+
+boxplot(agemenop~cancer)$out # values of all the 57 outliers for both 2 boxplots above 
+
+grp = boxplot(agemenop~cancer)$group # outliers in each group 
+
+which(grp ==1) # index of outlier in grp == 1 (Absent) 
+
+boxplot(agemenop~cancer)$out[which(grp ==1)]# values of outliers in grp ==1, 41 values 
+
+which(grp ==2) # index of outlier in grp == 2 (Present) 
+
+boxplot(agemenop~cancer)$out[which(grp ==2)]# values of outliers in grp ==2, 16 values 
+
+
+boxplot(agemenop~cancer)$names 
+
+# for many many boxplots
+boxplot(resale_price~flat_type, col = c(2,3,4,5,6,7,8)) 
+
+########## OUTLIERS 
+
+# outliers: 
+
+mark = c(mark, 45)# adding a point with value of 45 to the variable mark. 
+
+boxplot(mark) #the outlier (45) appears above median. 
+
+mark = c(mark, -10) # add another point with value of -10 to the variable mark. 
+
+boxplot(mark) #the outlier (45) appears above median, and the outlier (-10) appear below median 
+
+
+mark<- data[,2] 
+
+######### SCATTER PLOT 
+
+plot(floor_area_sqm, resale_price, col = 2) 
+
+#correlation
+cor(floor_area_sqm, resale_price)
+
+
+#Binomial distribution
+Generate a set (a vector) of 10 random observations that follow
+Bin(100, 0.5)
+> y = rbinom(10, 100, 0.5); y
+[1] 60 61 37 48 49 49 44 57 36 53
+
+Let X ? Bin(3889, 0.531), then P(X ? 2000) is
+> pbinom(2000, 3889, 0.531, lower.tail = TRUE)
+[1] 0.01906255
+
+Let X ? Bin(3889, 0.531), then P(X > 2000) is
+> pbinom(2000, 3889, 0.531, lower.tail = FALSE)
+[1] 0.9809374
+
+Let X ? Bin(100, 0.5). Then the quantile q0.9 is the value such that the left
+area of it is 0.9, or P(X ? q0.9) = 0.9.
+> qbinom(0.9, 100, 0.5)
+[1] 56
+Let X ? Bin(3889, 0.531), then 98th percentile q0.98 is
+> qbinom(0.98, 3889, 0.531)
+[1] 2129
+
+#Normal distribution
+#P(X<=1800), N(mean = 1500, var = 90000)
+pnorm(1800, mean = 1500, sd = sqrt(90000))
+
+#P(X>=1600), N(mean = 1500, var = 90000)
+pnorm(1600, mean = 1500, sd = sqrt(90000), lower.tail = FALSE)
+
+Generate a set (a vector) of 6 random observations that follow N(100, 152).
+> IQ = rnorm(6, mean = 100, sd = 15); IQ
+[1] 110.02791 102.30228 102.18245 95.50568 109.57204 108.64105
+
+#Find value of quantile at 0.995
+qnorm(0.995)
+
+Let X be the height of NUS students and assume that X ? N(170, 102).
+The 90th percentile or q0.9 is then
+> qnorm(0.9, 170, 10)
+[1] 182.8155
+That means 90% of students are shorter than 182.8.
+The proportion of students whose height are from 150 to 190 is
+> pnorm(190, 170, 10) - pnorm(150, 170, 10)
+[1] 0.9544997
+
+Let X ? Bin(n, p) where np(1 ? p) > 5, we say that the distribution of X
+can be approximated by a normal distribution with mean np and variance
+np(1 ? p).
+
+#t-distribution
+# q for quantile, t for t-distribution, 0.975 is probability, 6 is degrees of freedom(df) [df = n -1]
+qt(0.975,6)
+qt(0.975, 120) very close to qnorm(0.975) (large df)
+
+#equal variance test (H0 2 pop var are equal, H1 ..not equal)
+#x is vector of first sample(eg vector weight of 50 males), y is vector of 2nd sample(eg weight of 50 females).
+var.test(x,y)
+
+#make result reproduceable from random sample
+set.seed(999)
+
+#round digits
+x =round(x, digits =1)
+
+# to generate 10000 samples of size 12 each
+N.samples = matrix(rnorm(n*N, mu,sigma), N, n)
+
+#make mean of row
+sample.means = rowMeans(N.samples) # all 10k values of mean
+
+#for loop
+#rexp(n, 1/5000)" is to draw a set of n observations from an exponential distribution which has
+mean 5000
+ave = c()
+
+for (i in 1:N) {
+x = rexp(n, rate = 1/lambda)
+
+ave = append(ave, mean(x))
+
+} 
+
+
+
+
+
+
+
+
+
+
+
+#how to use ifelse
+table(bike$weathersit)
+1       2        3
+463   247   21
+# if weather is 1, assign to good, else assign to bad
+weather = ifelse(bike$weathersit == 1, "good", "bad")
+good bad
+463   268 = 247+21
+
+also can 
+if (Gender == 0) {Gender ====} else{?.}
+
+count_good = bike$cnt[which(weather == "good")] # group 1
+> count_bad = bike$cnt[which(weather == "bad")] #group 2
+> var.test(count_good, count_bad) # result: equal variances
+F test to compare two variances
+
+# t.test for 2 samples
+> t.test(count_good, count_bad, alternative = "two.sided",
++ var.equal = TRUE, conf.level = 0.95)
+
+#t.test for dependent sample
+t.test(diff, mu = 0, alternative = "greater", conf.level = 0.99)
+One Sample t-test 
+or
+t.test(Yes,No,alternative = "greater",paired = TRUE,conf.level = 0.99)
+Paired t-test
+
+
+#linear model
+#SellingPrice is response variable, ~ stands for regress on, Present Price is explanatory variable
+#argument data car is data name where it contains Selling price and present price columns
+car = read.csv(...)
+M1 =lm(SellingPrice~PresentPrice, data = car)
+summary(M1)
+
+#anova test to check significance of variable if have too many categorical variable (tests the variable one by one)
+anova(model)
+
+#how to declare factor
+hdb$flat_type = factor(hdb$flat_type)
+model = lm(resale_price ~ floor_area_sqm + flat_type , data = hdb)
+
+#fitted values
+new1 = data.frame(Present_Price = 20)
+predict(M1,newdata = new1)
+or
+new2 = data.frame(Present_Price = c(20,40))
+predict(M1,newdata = new2)
+
+#confidence interval for parameters
+confint(M1, level = 0.95) #CI for all coeff in model M1 (for B0 and B1)
+confint(M1, 'Present_Price', level = 0.95) #CI for Present P in model M1
+
+#interval of response (selling price)
+new2 = data.frame(Present_Price = c(20,40) # 2 points
+predict(M1, newdata = new2, interval = "confidence", level = 0.95)
+
+#p value of f test
+1016 is test-statistic, F = 1016, 299 is df (F =t^2) in simple model
+pf(1016, 1,299,lowertail = FALSE)
+
+
+#if H0 of F test not rejected(large p value), test without regressors
+# response selling_price depend on 1, 1 means model have only the intercept
+M1 = lm(Selling_Price~1, data = car)
+summary(M1)
+
+#to get raw residuals of model and standardized residuals
+car = read.csv?
+attach(car)
+M1 = lm(Selling_Price~Present_Price, data = car)
+raw.res = M1$res #raw residual
+SR = rstandard(M1) #standardized residual
+
+#residual plot
+plot(*model*$fitted.values,rstandard(model))
+
+#QQ-plot (SR is standardized residual)
+qqnorm(SR, datax = TRUE, y_lab = "SR", x_lab = "Z scores", main = "")
+qqline(SR, datax = TRUE, col = "red")
+
+# without datax the graph will flip
+qqnorm(SR, y_lab = "SR", x_lab = "Z scores", main = "")
+qqline(SR, col = "red")
+
+#Cooks distance to measure influence of a point (C>=1)
+which(SR>3 |SR < (-3)) # index of outliers
+C = cooks.distance(M1)
+which(C>1) #index of influential point
+
+# drop point 87 and fit model (car is the model)
+car2 = car[-87,]
+
+# Multiple-linear model
+#selling_price ~ x1 + x2
+M2 = lm(Selling_Price~Present_Price + Kms_Driven, data = car)
+summary(M2)
+
+# response variable:Selling Price
+# explanatory variable : present price, transmission type
+M3 = lm(Selling_Price ~ Present_Price + Transmission + Present_Price * Transmission, data =car)
+summary(M3)
